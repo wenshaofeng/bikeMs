@@ -9,7 +9,7 @@ class About extends Component {
     render() {
         return (
             <Fragment>
-                This is About 
+                This is About             
             </Fragment>
         );
     }

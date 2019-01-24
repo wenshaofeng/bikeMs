@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-
+import { Link } from 'react-router-dom'
 
 class Main extends Component {
     constructor(props) {
@@ -9,7 +9,10 @@ class Main extends Component {
     render() {
         return (
             <Fragment>
-                This is Main 
+                This is Main page 
+                <Link to='/a'> 嵌套路由 </Link>
+                <hr />
+                {this.props.children}
             </Fragment>
         );
     }
