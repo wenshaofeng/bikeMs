@@ -1,21 +1,16 @@
+@import './default.less';
 .container {
-    display: flex;
-
     .nav-left {
         width: 15%;
         min-width: 180px;
         height: calc(100vh);
         color: #fff;
-        background: #ccc;
+        background: #001529;
     }
-
     .main {
-        display: flex;
-        flex-direction: column;
-        flex: 1;
+        background: @colorL;
         height: calc(100vh);
     }
-
     .content {
         position: relative;
         padding: 20px;
