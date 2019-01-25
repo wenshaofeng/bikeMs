@@ -10,7 +10,7 @@ class Header extends Component {
             userName: '二狗子'
         })
         setInterval(() => {
-            let sysTime = moment().format('MMMM Do YYYY,h:mm:ss')
+            let sysTime = moment().format('YYYY MM Do,h:mm:ss a')
             this.setState({
                 sysTime
             })

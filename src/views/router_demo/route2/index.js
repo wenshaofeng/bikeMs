@@ -10,9 +10,9 @@ class Index extends Component {
     return (
       <Router>
         <Home>
-          <Route exact path='/' render={()=>
+          <Route  path='/main' render={()=>
             <Main>
-              <Route path="/a" component={Sub}></Route>
+              <Route path="/main/a" component={Sub} />
             </Main>
           } />
           <Route path='/about' component={About} />

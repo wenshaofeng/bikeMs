@@ -10,7 +10,7 @@ class Main extends Component {
         return (
             <Fragment>
                 This is Main page 
-                <Link to='/a'> 嵌套路由 </Link>
+                <Link to='/main/a'> 嵌套路由 </Link>
                 <hr />
                 {this.props.children}
             </Fragment>
