@@ -42,6 +42,7 @@ class Gallery extends Component {
         cover={<img src={'/gallery/' + item} alt='' />}
         style={{ marginBottom: 10 }}
         onClick={() => this.openGallery(item)}
+        key={item}
       >
         <Card.Meta
           title='React'
@@ -55,6 +56,7 @@ class Gallery extends Component {
         cover={<img src={'/gallery2/' + item} alt='' />}
         style={{ marginBottom: 10 }}
         onClick={() => this.openGallery2(item)}
+        key={item}
       >
         <Card.Meta
           title='邓紫棋'
@@ -88,7 +90,7 @@ class Gallery extends Component {
             </Row>
             <Modal
               title={'图片画廊'}
-              width={400}
+              width={300}
               height={200}
               visible={this.state.visible}
               onCancel={() => this.setState({ visible: false })}
@@ -118,7 +120,7 @@ class Gallery extends Component {
             </Row>
             <Modal
               title={'图片画廊'}
-              width={400}
+              width={350}
               height={200}
               visible={this.state.visible}
               onCancel={() => this.setState({ visible: false })}
