@@ -6,12 +6,13 @@ class Notices extends Component {
   openNotification = (type, direction) => {
     if (direction) {
       notification.config({
-        placement: direction
+        placement: direction       
       })
     }
     notification[type]({
       message: '发工资了',
       description: '上个月考勤22天，迟到12天',
+      duration:2.5
     })
   }
 
