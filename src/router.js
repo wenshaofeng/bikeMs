@@ -20,6 +20,9 @@ import Carousels from './views/ui/carousel'
 import FormLogin from './views/form/login'
 import FormRegister from './views/form/register'
 
+//表格组件
+import BasicTable from './views/table/basicTable'
+
 
 class IRouter extends Component {
     render() {
@@ -40,8 +43,8 @@ class IRouter extends Component {
                                 <Route path='/admin/ui/carousel' component={Carousels} />
                                 <Route path='/admin/form/login' component={FormLogin} />
                                 <Route path='/admin/form/reg' component={FormRegister} />
-                                {/*<Route path='/admin/table/basic' component={BasicTable} /> */}
-                                <Route  path='/admin' component={Home} />
+                                <Route path='/admin/table/basic' component={BasicTable} />
+                                <Route path='/admin' component={Home} />
                                 <Route component={NoMatch} />
                             </Switch>
                         </Admin>

@@ -4,6 +4,7 @@ import Header from './components/header'
 import Footer from './components/footer'
 import Home from './views/home'
 import NavLeft from './components/navLeft'
+
 import './style/common.less'
 
 class Admin extends Component {

@@ -3,10 +3,13 @@ import { Card, Form, Input, Button, message, Icon, Checkbox } from 'antd'
 const FormItem = Form.Item
 class FormLogin extends Component {
 
-  handleSubmit = () => {
+  handleSubmit = (e) => {
+    e.preventDefault()
     let userInfo = this.props.form.getFieldsValue()
     this.props.form.validateFields((error, value) => {
       if (!error) {
+        console.log('nice');     
+        console.log(value);
         message.success(`${userInfo.userName} 恭喜您通过本次表单学习，当前密码为${userInfo.userPwd}`)
       }
     })
@@ -49,7 +52,7 @@ class FormLogin extends Component {
                     {
                       min: 5,
                       max: 10,
-                      message: '长度不在范围内'
+                      message: '用户名长度不在范围内'
                     },
                     {
                       pattern: new RegExp('^\\w+$', 'g'),
@@ -64,8 +67,13 @@ class FormLogin extends Component {
               {
                 getFieldDecorator('userPwd', {
                   initialValue: '',
-                  rules: []
-                })(<Input prefix={<Icon type='lock' />} placeholder='请输入密码' />)
+                  rules: [
+                    {
+                      required: true,
+                      message: '密码不为空'
+                    }
+                  ]
+                })(<Input type='password' prefix={<Icon type='lock' />} placeholder='请输入密码' />)
               }
             </FormItem>
             <FormItem>
@@ -78,7 +86,7 @@ class FormLogin extends Component {
                   <Checkbox>记住密码</Checkbox>
                 )
               }
-              <a href="#/admin" style={{ float: 'right' }}>忘记密码</a>
+              <a href="#/admin/form/login" style={{ float: 'right' }}>忘记密码</a>
             </FormItem>
             <FormItem>
               <Button type='primary' onClick={this.handleSubmit}>登录</Button>
