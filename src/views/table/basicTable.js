@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import axios from '../../axios'
-import { Card, Table } from 'antd'
+import { Card, Table, Modal } from 'antd'
 class BasicTable extends Component {
     constructor(props) {
         super(props)
@@ -12,7 +12,7 @@ class BasicTable extends Component {
     componentDidMount() {
         const dataSource = [
             {
-                key: '0',
+
                 id: '0',
                 userName: 'Jack',
                 sex: 1,
@@ -23,7 +23,6 @@ class BasicTable extends Component {
                 time: '09:00'
             },
             {
-                key: '1',
                 id: '1',
                 userName: 'Tom',
                 sex: 0,
@@ -34,7 +33,6 @@ class BasicTable extends Component {
                 time: '09:00'
             },
             {
-                key: '2',
                 id: '2',
                 userName: 'Liny',
                 sex: 1,
@@ -45,6 +43,9 @@ class BasicTable extends Component {
                 time: '09:00'
             }
         ]
+        dataSource.map((item, index) => {
+            item.key = index
+        })
         this.setState({ dataSource })
         this.request()
     }
@@ -54,14 +55,17 @@ class BasicTable extends Component {
             axios.get({
                 url: '/table/list',
                 data: {
-                    paramrs:{
-                        page:1,
+                    paramrs: {
+                        page: 1,
                     },
                     isShowLoading: true
                 },
             }).then(res => {
                 console.log(res);
                 if (res.code === 0) {
+                    res.result.map((item, index) => {
+                        item.key = index
+                    })
                     this.setState(() => ({
                         dataSource2: res.result
                     }))
@@ -69,6 +73,20 @@ class BasicTable extends Component {
                 }
             })
         )
+    }
+
+    onRowClick = (record, index) => { //record 当前数据 index 索引
+        let selectKey = [index] //选中的索引
+        this.setState(() => ({
+            selectedRowKeys: selectKey, // 当前选中的索引
+            selectedItem: record  // 当前选中的某条数据
+        }))
+        console.log(record);
+        
+        Modal.info({
+            title:'当前用户信息',
+            content:`用户名：${record.userName} 性别:${record.sex===1?"男":"女"} 生日:${record.birthday}`
+        })
     }
 
     render() {
@@ -132,6 +150,12 @@ class BasicTable extends Component {
                 dataIndex: 'time'
             }
         ]
+        const selectedRowKeys = this.state.selectedRowKeys
+        const rowSelection = {
+            type: 'radio',
+            selectedRowKeys
+        }
+
         return (
             <div>
                 <Card
@@ -155,6 +179,26 @@ class BasicTable extends Component {
                         columns={columns}
                         dataSource={this.state.dataSource2}
                         pagination={false}
+                    />
+                </Card>
+
+                <Card
+                    title='Mooc-单选'
+                    style={{ margin: '10px 0' }}
+                >
+                    <Table
+                        bordered
+                        rowSelection={rowSelection}
+                        columns={columns}
+                        dataSource={this.state.dataSource2}
+                        pagination={false}
+                        onRow={(record, index) => {
+                            return {
+                                onClick: () => {
+                                    this.onRowClick(record, index)
+                                }
+                            }
+                        }}
                     />
                 </Card>
             </div>
