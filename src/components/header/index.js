@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { Row, Col } from 'antd'
 import moment from 'moment'
-import axios from '../../aixos'
+import axios from '../../axios'
 import './index.less'
 
 class Header extends Component {
