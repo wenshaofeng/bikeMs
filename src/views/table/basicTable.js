@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import axios from '../../axios'
-import { Card, Table, Modal } from 'antd'
+import { Card, Table, Modal, Button, message } from 'antd'
 class BasicTable extends Component {
     constructor(props) {
         super(props)
@@ -67,7 +67,9 @@ class BasicTable extends Component {
                         item.key = index
                     })
                     this.setState(() => ({
-                        dataSource2: res.result
+                        dataSource2: res.result,
+                        selectedRowKeys: [],
+                        selectedRows:[]
                     }))
 
                 }
@@ -82,10 +84,28 @@ class BasicTable extends Component {
             selectedItem: record  // 当前选中的某条数据
         }))
         console.log(record);
-        
+
         Modal.info({
-            title:'当前用户信息',
-            content:`用户名：${record.userName} 性别:${record.sex===1?"男":"女"} 生日:${record.birthday}`
+            title: '当前用户信息',
+            content: `用户名：${record.userName} 性别:${record.sex === 1 ? "男" : "女"} 生日:${record.birthday}`
+        })
+    }
+
+    handleDelete = () => {
+        let rows = this.state.selectedRows
+        let ids = []
+        let users = []
+        rows.map((item) => {
+            ids.push(item.id)
+            users.push(item.userName)
+        })
+        Modal.confirm({
+            title: '删除提示',
+            content: `您确定要删除这些数据吗？ ${ids.join(',')} ${users.join('和')} `,
+            onOk: () => {
+                message.success('删除成功')
+                this.request()
+            }
         })
     }
 
@@ -155,6 +175,16 @@ class BasicTable extends Component {
             type: 'radio',
             selectedRowKeys
         }
+        const rowCheckSelection = {
+            type: 'checkbox',
+            selectedRowKeys,
+            onChange: (selectedRowKeys, selectedRows) => {
+                this.setState(() => ({
+                    selectedRowKeys,
+                    selectedRows
+                }))
+            }
+        }
 
         return (
             <div>
@@ -199,6 +229,24 @@ class BasicTable extends Component {
                                 }
                             }
                         }}
+                    />
+                </Card>
+
+                <Card
+                    title='Mooc-多选'
+                    style={{ margin: '10px 0' }}
+                >
+                    <div>
+                        <Button onClick={this.handleDelete}
+                            style={{ margin: '10px 0' }}
+                        >删除</Button>
+                    </div>
+                    <Table
+                        bordered
+                        rowSelection={rowCheckSelection}
+                        columns={columns}
+                        dataSource={this.state.dataSource2}
+                        pagination={false}
                     />
                 </Card>
             </div>
