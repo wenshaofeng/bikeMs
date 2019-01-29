@@ -1,11 +1,15 @@
 import React, { Component } from 'react'
 import axios from '../../axios'
 import { Card, Table, Modal, Button, message } from 'antd'
+import Util from '../../utils/utils'
 class BasicTable extends Component {
     constructor(props) {
         super(props)
         this.state = {
             dataSource2: []
+        }
+        this.params = {
+            page: 1
         }
     }
 
@@ -51,30 +55,35 @@ class BasicTable extends Component {
     }
 
     request = () => {
-        (
-            axios.get({
-                url: '/table/list',
-                data: {
-                    paramrs: {
-                        page: 1,
-                    },
-                    isShowLoading: true
+        let _this = this
+        axios.get({
+            url: '/table/list',
+            data: {
+                params: {
+                    page: this.params.page,
                 },
-            }).then(res => {
-                console.log(res);
-                if (res.code === 0) {
-                    res.result.map((item, index) => {
-                        item.key = index
+                isShowLoading: true
+            },
+        }).then(res => {
+            console.log(res);
+            if (res.code === 0) {
+                res.result.list.map((item, index) => {
+                    item.key = index
+                })
+                this.setState(() => ({
+                    dataSource2: res.result.list,
+                    selectedRowKeys: [],
+                    selectedRows: [],
+                    pagination: Util.pagination(res, (current) => {
+                        //todo 
+                        _this.params.page = current
+                        this.request()
                     })
-                    this.setState(() => ({
-                        dataSource2: res.result,
-                        selectedRowKeys: [],
-                        selectedRows:[]
-                    }))
 
-                }
-            })
-        )
+                }))
+
+            }
+        })
     }
 
     onRowClick = (record, index) => { //record 当前数据 index 索引
@@ -110,6 +119,7 @@ class BasicTable extends Component {
     }
 
     render() {
+
         const columns = [
             {
                 title: 'id',
@@ -179,8 +189,11 @@ class BasicTable extends Component {
             type: 'checkbox',
             selectedRowKeys,
             onChange: (selectedRowKeys, selectedRows) => {
+                console.log(selectedRowKeys);
+                console.log(selectedRows);
+
                 this.setState(() => ({
-                    selectedRowKeys,
+                    selectedRowKeys, //必须要有的，设置了这个，页面上才会显示是否选中的状态
                     selectedRows
                 }))
             }
@@ -247,6 +260,18 @@ class BasicTable extends Component {
                         columns={columns}
                         dataSource={this.state.dataSource2}
                         pagination={false}
+                    />
+                </Card>
+
+                <Card
+                    title='Mooc-表格分页'
+                    style={{ margin: '10px 0' }}
+                >
+                    <Table
+                        bordered
+                        columns={columns}
+                        dataSource={this.state.dataSource2}
+                        pagination={this.state.pagination}
                     />
                 </Card>
             </div>
