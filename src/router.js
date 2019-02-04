@@ -1,27 +1,28 @@
 import React, { Component } from 'react';
-import { HashRouter, Route, Switch, Redirect } from 'react-router-dom'
-import App from './App'
-import Login from './views/login'
-import NoMatch from './views/nomatch'
-import Admin from './admin'
-import Home from './views/home'
+import { HashRouter, Route, Switch, Redirect } from 'react-router-dom';
+import App from './App';
+import Login from './views/login';
+import NoMatch from './views/nomatch';
+import Admin from './admin';
+import Home from './views/home';
 
 //UI菜单下的组件
-import Buttons from './views/ui/button.js'
-import Modals from './views/ui/modal.js'
-import Loadings from './views/ui/lodings'
-import Notices from './views/ui/notification'
-import Messages from './views/ui/message'
-import Tab from './views/ui/tabs'
-import Gallery from './views/ui/gallery'
-import Carousels from './views/ui/carousel'
+import Buttons from './views/ui/button.js';
+import Modals from './views/ui/modal.js';
+import Loadings from './views/ui/lodings';
+import Notices from './views/ui/notification';
+import Messages from './views/ui/message';
+import Tab from './views/ui/tabs';
+import Gallery from './views/ui/gallery';
+import Carousels from './views/ui/carousel';
 
 //表单组件
-import FormLogin from './views/form/login'
-import FormRegister from './views/form/register'
+import FormLogin from './views/form/login';
+import FormRegister from './views/form/register';
 
 //表格组件
-import BasicTable from './views/table/basicTable'
+import BasicTable from './views/table/basicTable';
+import AdvancedTable from './views/table/advancedTable';
 
 
 class IRouter extends Component {
@@ -29,6 +30,9 @@ class IRouter extends Component {
         return (
             <HashRouter>
                 <App>
+                    <Route exact path="/" render={() => (
+                        <Redirect to="/admin" />
+                    )} />
                     <Route path='/login' component={Login} />
                     <Route path='/admin' render={() => (
                         <Admin>
@@ -44,6 +48,7 @@ class IRouter extends Component {
                                 <Route path='/admin/form/login' component={FormLogin} />
                                 <Route path='/admin/form/reg' component={FormRegister} />
                                 <Route path='/admin/table/basic' component={BasicTable} />
+                                <Route path='/admin/table/high' component={AdvancedTable} />
                                 <Route path='/admin' component={Home} />
                                 <Route component={NoMatch} />
                             </Switch>
