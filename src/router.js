@@ -24,6 +24,9 @@ import FormRegister from './views/form/register';
 import BasicTable from './views/table/basicTable';
 import AdvancedTable from './views/table/advancedTable';
 
+//城市管理
+import City from './views/city'
+
 
 class IRouter extends Component {
     render() {
@@ -49,7 +52,8 @@ class IRouter extends Component {
                                 <Route path='/admin/form/reg' component={FormRegister} />
                                 <Route path='/admin/table/basic' component={BasicTable} />
                                 <Route path='/admin/table/high' component={AdvancedTable} />
-                                <Route path='/admin' component={Home} />
+                                <Route path='/admin/city' component={City} />
+                                {/* <Route path='/admin' component={Home} /> */}
                                 <Route component={NoMatch} />
                             </Switch>
                         </Admin>

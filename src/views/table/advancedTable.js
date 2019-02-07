@@ -59,7 +59,7 @@ class AdvancedTable extends Component {
         console.log(id)
         Modal.confirm({
             title: '确认',
-            content: '您确定要删除此条数据吗？',
+            content: `您确定要删除此条数据吗？ 用户名: ${item.userName}`,
             onOk: () => {
                 message.success('删除成功');
                 this.request()
