@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Card, Button, Table, Form, Select, Modal, message, Radio } from 'antd'
 import axios from './../../axios/index'
 import Utils from './../../utils/utils'
+import moment from 'moment'
 import './../../style/common.less'
 
 const FormItem = Form.Item
@@ -24,13 +25,32 @@ class City extends Component {
         this.requestList()
     }
 
-    //开通城市
+    //查询城市功能
+    handleSearch = (info) => {
+        console.log(info);
+        axios
+            .get({
+                url: '/city/search',
+                data: {
+                    params: info
+                }
+            })
+            .then(res => {
+                if (res.code === 0) {
+                    message.success(`${res.result}`)
+                    this.requestList()
+                }
+            })
+    }
+
+    //开通城市弹出框
     handleOpenCity = () => {
         this.setState({
             isShowOpenCity: true
         })
     }
 
+    //开通城市表单提交
     handleSubmit = () => {
         let cityInfo = this.cityForm.props.form.getFieldsValue()
         console.log(cityInfo)
@@ -123,7 +143,11 @@ class City extends Component {
             {
                 title: '操作时间',
                 dataIndex: 'update_time',
-                render: Utils.formateDate
+                render(update_time) {
+                    return (
+                        moment(update_time).format('YYYY-MM-DD HH:mm:ss')
+                    );
+                }
             },
             {
                 title: '操作人',
@@ -134,7 +158,11 @@ class City extends Component {
         return (
             <div>
                 <Card>
-                    <FilterForm />
+                    <FilterForm wrappedComponentRef={(inst) => {
+                        this.filterForm = inst
+                    }}
+                        search={this.handleSearch.bind(this)}
+                    />
                 </Card>
 
                 <Card style={{ marginTop: 10 }}>
@@ -171,6 +199,14 @@ class City extends Component {
 }
 // 查询筛选表单
 class FilterForm extends Component {
+    handleReset = () => {
+        this.props.form.resetFields()
+    }
+
+    handleSearchClick = () => {   
+        this.props.search(this.props.form.getFieldsValue())
+    }
+
     render() {
         const { getFieldDecorator } = this.props.form
 
@@ -239,10 +275,11 @@ class FilterForm extends Component {
                         style={{
                             margin: '0 20px'
                         }}
+                        onClick={this.handleSearchClick}
                     >
                         查询
 					</Button>
-                    <Button> 重置 </Button>
+                    <Button onClick={this.handleReset}> 重置 </Button>
                 </FormItem>
             </Form>
         )
