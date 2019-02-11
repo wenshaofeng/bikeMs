@@ -24,8 +24,9 @@ import FormRegister from './views/form/register';
 import BasicTable from './views/table/basicTable';
 import AdvancedTable from './views/table/advancedTable';
 
-//城市管理
-import City from './views/city'
+
+import City from './views/city'  //城市管理
+import Order from './views/order' //订单管理
 
 
 class IRouter extends Component {
@@ -53,6 +54,7 @@ class IRouter extends Component {
                                 <Route path='/admin/table/basic' component={BasicTable} />
                                 <Route path='/admin/table/high' component={AdvancedTable} />
                                 <Route path='/admin/city' component={City} />
+                                <Route path='/admin/order' component={Order} />
                                 {/* <Route path='/admin' component={Home} /> */}
                                 <Route component={NoMatch} />
                             </Switch>
