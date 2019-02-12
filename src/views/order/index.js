@@ -50,10 +50,95 @@ class Order extends Component {
             })
     }
 
-    //确认订单
-    handleConfirm = () => {
-
+    //查询订单
+    handleSearch = (info) => {
+        console.log(info);
+        axios
+            .get({
+                url: '/order/search',
+                data: {
+                    params: info
+                }
+            })
+            .then(res => {
+                if (res.code === 0) {
+                    message.success(`${res.result}`)
+                    this.requestList()
+                }
+            })
     }
+
+    //结束订单-确认车辆信息
+    handleConfirm = () => {
+        let item = this.state.selectedItem
+
+        if (!item) {
+            Modal.info({
+                title: '温馨提示',
+                content: '请选择需要操作的订单'
+            })
+            return
+        }
+        if (item.status === 2) {
+            Modal.info({
+                title:'温馨提示',
+                content:'该订单行程已结束'
+            })
+            return
+        }
+        axios
+            .get({
+                url: '/order/ebike_info',
+                data: {
+                    params: {
+                        orderId: item.id
+                    }
+                }
+            })
+            .then(res => {
+                if (res.code === 0) {
+                    this.setState({
+                        orderInfo: res.result,
+                        orderConfirmVisible: true
+                    })
+                }
+            })
+    }
+
+    //结束订单
+    handleFinishOrder = () => {
+        let item = this.state.selectedItem
+        axios
+            .get({
+                url: '/order/finish_order',
+                data: {
+                    params: {
+                        orderId: item.id
+                    }
+                }
+            })
+            .then((res) => {
+                if (res.code === 0) {
+                    message.success(`${res.msg}`)
+                    this.setState({
+                        orderConfirmVisible: false
+                    })
+                    this.requestList()
+                }
+            })
+    }
+
+    //选择某一行订单
+    onRowClick = (record, index) => {
+        let selectKey = [index]
+
+        this.setState({
+            selectedRowKeys: selectKey,
+            selectedItem: record
+        })
+        console.log(record);
+    }
+
     render() {
         const columns = [
             {
@@ -66,7 +151,7 @@ class Order extends Component {
             },
             {
                 title: '用户名',
-                align:'center',
+                align: 'center',
                 dataIndex: 'user_name',
                 width: 80
             },
@@ -77,7 +162,7 @@ class Order extends Component {
             {
                 title: '里程',
                 dataIndex: 'distance',
-                align:'center',
+                align: 'center',
                 width: 80,
                 render(distance) {
                     return distance / 1000 + ' km'
@@ -86,17 +171,17 @@ class Order extends Component {
             {
                 title: '行驶时长',
                 dataIndex: 'total_time',
-                align:'center',
+                align: 'center',
                 width: 100
             },
             {
                 title: '状态',
                 dataIndex: 'status',
                 width: 80,
-                align:'center',
+                align: 'center',
                 render(status) {
                     return (
-                        status === 1 ? '进行中' : '结束行程'
+                        status === 1 ? '进行中' : '行程结束'
                     );
                 }
             },
@@ -113,14 +198,14 @@ class Order extends Component {
             {
                 title: '订单金额',
                 dataIndex: 'total_fee',
-                align:'center',
+                align: 'center',
                 width: 100
             },
             {
                 title: '实付金额',
                 dataIndex: 'user_pay',
                 width: 100,
-                align:'center'
+                align: 'center'
             }
         ]
 
@@ -137,7 +222,7 @@ class Order extends Component {
         return (
             <div>
                 <Card>
-                    <FilterForm />
+                    <FilterForm search={this.handleSearch.bind(this)} />
                 </Card>
 
                 <Card style={{ marginTop: 10 }}>
@@ -154,21 +239,56 @@ class Order extends Component {
                         dataSource={this.state.list}
                         pagination={this.state.pagination}
                         rowSelection={rowSelection}
-                    // onRow={(record, index) => {
-                    //     return {
-                    //         onClick: () => {
-                    //             this.onRowClick(record, index)
-                    //         }
-                    //     }
-                    // }}
+                        onRow={(record, index) => {
+                            return {
+                                onClick: () => {
+                                    this.onRowClick(record, index)
+                                }
+                            }
+                        }}
                     />
                 </div>
+
+                <Modal
+                    title="结束订单"
+                    visible={this.state.orderConfirmVisible}
+                    onCancel={() => {
+                        this.setState({
+                            orderConfirmVisible: false
+                        })
+                    }}
+                    onOk={this.handleFinishOrder}
+                    width={400}
+                >
+                    <Form layout="horizontal">
+                        <FormItem {...formItemLayout} label="车辆编号">
+                            {this.state.orderInfo.bike_sn}
+                        </FormItem>
+                        <FormItem {...formItemLayout} label="剩余电量">
+                            {this.state.orderInfo.battery + '%'}
+                        </FormItem>
+                        <FormItem {...formItemLayout} label="行程开始时间">
+                            {this.state.orderInfo.start_time}
+                        </FormItem>
+                        <FormItem {...formItemLayout} label="当前位置">
+                            {this.state.orderInfo.location}
+                        </FormItem>
+                    </Form>
+                </Modal>
             </div>
         );
     }
 }
 
 class FilterForm extends Component {
+    handleReset = () => {
+        this.props.form.resetFields()
+    }
+
+    handleSearchClick = () => {
+        this.props.search(this.props.form.getFieldsValue())
+    }
+
     render() {
         const { getFieldDecorator } = this.props.form
 
@@ -178,7 +298,7 @@ class FilterForm extends Component {
                     {getFieldDecorator('city_id')(
                         <Select
                             style={{
-                                width: 80
+                                width: 100
                             }}
                             placeholder="全部"
                         >
@@ -195,7 +315,10 @@ class FilterForm extends Component {
                         <DatePicker
                             showTime
                             format="YYYY-MM-DD HH:mm:ss"
-                            placeholder="选择开始时间" />
+                            placeholder="选择开始时间"
+                            style={{
+                                width: 180
+                            }} />
                     )}
                     <label style={{ marginLeft: 10 }} >  ~ </label>
                     {getFieldDecorator('end_time')(
@@ -203,7 +326,7 @@ class FilterForm extends Component {
                             showTime
                             format="YYYY-MM-DD HH:mm:ss"
                             placeholder="选择结束时间"
-                            style={{ marginLeft: 10 }} />
+                            style={{ marginLeft: 10, width: 180 }} />
                     )}
                 </FormItem>
 
@@ -212,12 +335,12 @@ class FilterForm extends Component {
                         <Select
                             placeholder="全部"
                             style={{
-                                width: 80
+                                width: 120
                             }}
                         >
                             <Option value=""> 全部 </Option>
                             <Option value="1"> 进行中 </Option>
-                            <Option value="2"> 结束行程 </Option>
+                            <Option value="2"> 行程结束 </Option>
                         </Select>
                     )}
                 </FormItem>
@@ -228,10 +351,11 @@ class FilterForm extends Component {
                         style={{
                             margin: '0 20px'
                         }}
+                        onClick={this.handleSearchClick}
                     >
                         查询
 					</Button>
-                    <Button> 重置 </Button>
+                    <Button onClick={this.handleReset}> 重置 </Button>
                 </FormItem>
             </Form>
         )
