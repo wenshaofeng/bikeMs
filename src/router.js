@@ -28,6 +28,8 @@ import AdvancedTable from './views/table/advancedTable';
 import City from './views/city'  //城市管理
 import Order from './views/order' //订单管理
 
+import Common from './common' //通用页面组件
+
 
 class IRouter extends Component {
     render() {
@@ -60,7 +62,12 @@ class IRouter extends Component {
                             </Switch>
                         </Admin>
                     )} />
-                    <Route path='/order/detail' component={Login} />
+                    {/* 通用详情页 */}
+                    <Route path='/common' render={() => (
+                        <Common>
+                            <Route path='/common/order/detail/:orderId' component={Login} />
+                        </Common>
+                    )} />
                 </App>
             </HashRouter>
         );

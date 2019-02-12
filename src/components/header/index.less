@@ -6,6 +6,19 @@
         line-height: 60px;
         padding: 0 20px;
         text-align: right;
+        .logo {
+            line-height: 60px;
+            text-align: left;
+            font-size: 18px;
+            font-family: Arial, Helvetica, sans-serif;
+            img {
+                height: 40px;
+                vertical-align: middle;
+            }
+            span {
+                margin-left: 6px;
+            }
+        }
         a {
             margin-left: 20px;
         }
@@ -18,12 +31,12 @@
         .breadcrumb-title {
             text-align: center;
             font-size: @fontC;
-            &:after{
+            &:after {
                 position: absolute;
                 content: '';
                 left: 78px;
-                top:39px;
-                border-top:9px solid @colorM;
+                top: 39px;
+                border-top: 9px solid @colorM;
                 border-left: 12px solid transparent;
                 border-right: 12px solid transparent;
             }
@@ -33,12 +46,31 @@
             font-size: 5px;
             .date {
                 margin-right: 10px;
+                vertical-align: middle;
             }
             .weather-img {
-                display: inline-block;
-                width: 53px;
-                margin-right: 10px;
+                img {
+                    margin-left: 3px;
+                    height: 15px;
+                }
+            }
+            .weather-detail {
+                margin-left: 5px;
+                vertical-align: middle;
             }
         }
+    }
+}
+
+// common 页面简单头
+.simple-page {
+    .header-top {
+        background: #1890ff;
+        color: @colorM;
+    }
+    .ant-form,
+    .ant-col-12,
+    .weather {
+        display: none;
     }
 }

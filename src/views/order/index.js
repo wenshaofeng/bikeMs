@@ -81,8 +81,8 @@ class Order extends Component {
         }
         if (item.status === 2) {
             Modal.info({
-                title:'温馨提示',
-                content:'该订单行程已结束'
+                title: '温馨提示',
+                content: '该订单行程已结束'
             })
             return
         }
@@ -138,6 +138,19 @@ class Order extends Component {
         })
         console.log(record);
     }
+
+    //打开订单详情页
+	openOrderDetails = () => {
+		let item = this.state.selectedItem
+		if (!item) {
+			Modal.info({
+				title: '提示',
+				content: '请先选择一条订单'
+			})
+			return
+		}
+		window.open(`/#/common/order/detail/${item.id}`, '_blank')
+	}
 
     render() {
         const columns = [
@@ -226,7 +239,7 @@ class Order extends Component {
                 </Card>
 
                 <Card style={{ marginTop: 10 }}>
-                    <Button type="primary"> 订单详情 </Button>
+                    <Button type="primary" onClick={this.openOrderDetails} > 订单详情 </Button>
                     <Button type="primary" style={{ marginLeft: 20 }} onClick={this.handleConfirm}>
                         结束订单
 					</Button>
