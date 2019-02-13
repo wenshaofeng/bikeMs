@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Row } from 'antd'
 import Header from './components/header'
 
+
 import './style/common.less'
 class Common extends Component {
     render() {

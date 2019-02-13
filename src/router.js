@@ -29,7 +29,7 @@ import City from './views/city'  //城市管理
 import Order from './views/order' //订单管理
 
 import Common from './common' //通用页面组件
-
+import OrderDetail from './views/order/detail' //订单详情
 
 class IRouter extends Component {
     render() {
@@ -65,7 +65,7 @@ class IRouter extends Component {
                     {/* 通用详情页 */}
                     <Route path='/common' render={() => (
                         <Common>
-                            <Route path='/common/order/detail/:orderId' component={Login} />
+                            <Route path='/common/order/detail/:orderId/:user_name/:order_sn' component={OrderDetail} />
                         </Common>
                     )} />
                 </App>

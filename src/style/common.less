@@ -1,5 +1,24 @@
 @import './default.less';
 @import './loading.less';
+body {
+    background: @colorL;
+    font-family: "Helvetica Neue For Number", "PingFang SC Light", "Heiti SC", "San Francisco", "Helvetica", Arial, sans-serif;
+}
+
+ul,
+li {
+    list-style: none;
+}
+
+.clearfix {
+    &:after {
+        content: " ";
+        clear: both;
+        display: block;
+        visibility: hidden;
+    }
+}
+
 .container {
     display: flex;
     .nav-left {
@@ -22,6 +41,12 @@
         position: relative;
         padding: 20px;
     }
+}
+
+.content {
+    text-align: left;
+    position: relative;
+    padding: 20px;
 }
 
 .content-wrap {

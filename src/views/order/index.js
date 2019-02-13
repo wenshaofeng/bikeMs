@@ -149,7 +149,7 @@ class Order extends Component {
 			})
 			return
 		}
-		window.open(`/#/common/order/detail/${item.id}`, '_blank')
+		window.open(`/#/common/order/detail/${item.id}/${item.user_name}/${item.order_sn}`, '_blank')
 	}
 
     render() {
