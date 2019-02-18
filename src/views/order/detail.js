@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Card} from 'antd'
+import { Card } from 'antd'
 import axios from './../../axios/index'
 import Utils from './../../utils/utils'
 
@@ -36,9 +36,89 @@ class OrderDetail extends Component {
                     this.setState({
                         orderInfo: res.result
                     })
+                    this.renderMap(res.result)
                 }
             })
 
+    }
+
+    renderMap = (result) => {
+        this.map = new window.BMap.Map('orderDetailMap')
+        // this.map.centerAndZoom('北京', 11)
+        // 调用添加地图控件方法
+        this.addMapControl()
+        // 调用路线图绘制方法
+        this.drawBikeRoute(result.position_list)
+        //     // 调用服务区绘制方法
+        this.drawServiceArea(result.area)
+    }
+
+    addMapControl = () => { //添加地图控件
+        let map = this.map
+        map.addControl(new window.BMap.ScaleControl({ anchor: window.BMAP_ANCHOR_TOP_RIGHT }))
+        map.addControl(new window.BMap.NavigationControl({ anchor: window.BMAP_ANCHOR_TOP_RIGHT }))
+        map.enableScrollWheelZoom(true);   //开启鼠标滚轮缩放
+    }
+
+    drawBikeRoute = (position_list) => { //绘制用户的行驶路线图
+        let map = this.map
+        let startPoint = ''
+        let endPoint = ''
+        if (position_list.length > 0) {
+            // 绘制起点坐标icon
+            let first = position_list[0]
+            let startPoint = new window.BMap.Point(first.lon, first.lat)
+            console.log(startPoint);
+            
+            let startIcon = new window.BMap.Icon('/assets/start_point.png', new window.BMap.Size(36, 42), {
+                imageSize: new window.BMap.Size(36, 42),
+                anchor: new window.BMap.Size(36, 42)
+            })
+            let startMarker = new window.BMap.Marker(startPoint, { icon: startIcon })
+            this.map.addOverlay(startMarker)
+
+            // 绘制终点坐标icon
+            let last = position_list[position_list.length - 1]
+            let endPoint = new window.BMap.Point(last.lon, last.lat)
+            console.log(endPoint);
+            let endIcon = new window.BMap.Icon('/assets/end_point.png', new window.BMap.Size(36, 42), {
+                imageSize: new window.window.BMap.Size(36, 42),
+                anchor: new window.BMap.Size(36, 42)
+            })
+            let endMarker = new window.BMap.Marker(endPoint, { icon: endIcon })
+            this.map.addOverlay(endMarker)
+
+            //绘制行驶路线
+            let trackPoint = []
+            for (let i = 0; i < position_list.length; i++) {
+                let point = position_list[i]
+                console.log(point);             
+                trackPoint.push(new window.BMap.Point(point.lon, point.lat))
+            }
+            let polyline = new window.BMap.Polyline(trackPoint, {
+                strokeColor: '#0075c7',
+                strokeWeight: 3,
+                strokeOpacity: 1
+            })
+            this.map.addOverlay(polyline)
+            this.map.centerAndZoom(endPoint, 11)
+
+        }
+    }
+
+    drawServiceArea = (area) => { //绘制服务区
+        let trackPoint = []
+        for (let i = 0; i < area.length; i++) {
+            let point = area[i]
+            trackPoint.push(new window.BMap.Point(point.lon, point.lat))
+        }
+        let polygon = new window.BMap.Polygon(trackPoint, {
+            strokeColor: '#CE0000',
+            strokeWeight: 4,
+            strokeOpacity: 1,
+            fillColor: '#ff8605'
+        })
+        this.map.addOverlay(polygon)
     }
 
     render() {
@@ -48,8 +128,7 @@ class OrderDetail extends Component {
         return (
             <div>
                 <Card>
-                    <div id="orderDetailMap">地图</div>
-
+                    <div id="orderDetailMap" className='order-map'>地图</div>
                     <div className="detail-items">
                         <div className="item-title">基础信息</div>
                         <ul className="detail-form">
