@@ -14,9 +14,8 @@ class FilterForm extends Component {
         if (formList && formList.length > 0) {
             formList.forEach((item, index) => {
                 let label = item.label
-                let field = item.field 
+                let field = item.field
                 let initialValue = item.initialValue || ''
-                let id = item.field
                 let placeHolder = item.placeholder
                 let width = item.width
                 if (item.type === '时间查询') {
@@ -40,43 +39,40 @@ class FilterForm extends Component {
                                     style={{ marginLeft: 10, width: 170 }} />
                             )}
                         </FormItem>
-
                     )
                     formItemList.push(DataPicker)
                 }
                 else if (item.type === 'INPUT') { //Input框
                     const INPUT = (
                         <FormItem label={label} key={field}>
-                            {getFieldDecorator([field], {
-                                initialValue: initialValue ,
-                                id:id
+                            {getFieldDecorator( field , {
+                                initialValue: initialValue,
                             })(<Input type="text" placeholder={placeHolder} />)}
                         </FormItem>
                     )
                     formItemList.push(INPUT)
                 } else if (item.type === 'SELECT') { //单选框
-                    const SELECT = (
+                    const SELECT = 
                         <FormItem label={label} key={field}>
-                            {getFieldDecorator([field], {
+                            {getFieldDecorator( field, {
                                 initialValue: initialValue,
-                                id:id
                             })(
-                                <Select                   
+                                <Select
                                     style={{
                                         width: width
                                     }}
                                     placeholder={placeHolder}
-                                >         
+                                >
                                     {Utils.getOptionList(item.list)}
                                 </Select>
                             )}
                         </FormItem>
-                    )
-                    console.log(SELECT);
                     
+                    console.log(SELECT);
+
                     formItemList.push(SELECT)
                 } else if (item.type === 'CHECKBOX') { //复选框
-                    const CHECKBOX = (
+                    const CHECKBOX = 
                         <FormItem label={label} key={field}>
                             {
                                 getFieldDecorator([field], {
@@ -85,7 +81,7 @@ class FilterForm extends Component {
                                 })(<Checkbox>{label}</Checkbox>)
                             }
                         </FormItem>
-                    )
+                    
                     formItemList.push(CHECKBOX)
                 }
             })
