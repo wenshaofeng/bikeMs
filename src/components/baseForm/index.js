@@ -61,8 +61,7 @@ class FilterForm extends Component {
                                 initialValue: initialValue,
                                 id:id
                             })(
-                                <Select       
-                                    id={'nice'}              
+                                <Select                   
                                     style={{
                                         width: width
                                     }}

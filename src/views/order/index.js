@@ -18,7 +18,7 @@ class Order extends Component {
             page: 1
         }
         this.orderFormList = [
-            {   
+            {
                 type: 'SELECT',
                 label: '城市',
                 field: 'city_id',
@@ -34,10 +34,10 @@ class Order extends Component {
                 ]
             },
             {
-                type: '时间查询', 
+                type: '时间查询',
                 field: 'time'
             },
-            {   
+            {
                 type: 'SELECT',
                 label: '订单状态',
                 field: 'order_status',
@@ -61,28 +61,29 @@ class Order extends Component {
 
     requestList = () => {
         let _this = this
-        axios
-            .get({
-                url: '/order/list',
-                data: {
-                    params: {
-                        page: this.params.page
-                    }
-                }
-            })
-            .then((res) => {
-                let list = res.result.item_list.map((item, index) => {
-                    item.key = index
-                    return item
-                })
-                this.setState({
-                    list,
-                    pagination: Utils.pagination(res, (current) => {
-                        _this.params.page = current
-                        _this.requestList()
-                    })
-                })
-            })
+        axios.requestList(this, '/order/list', this.params, true)
+        // axios
+        //     .get({
+        //         url: '/order/list',
+        //         data: {
+        //             params: {
+        //                 page: this.params.page
+        //             }
+        //         }
+        //     })
+        //     .then((res) => {
+        //         let list = res.result.item_list.map((item, index) => {
+        //             item.key = index
+        //             return item
+        //         })
+        //         this.setState({
+        //             list,
+        //             pagination: Utils.pagination(res, (current) => {
+        //                 _this.params.page = current
+        //                 _this.requestList()
+        //             })
+        //         })
+        //     })
     }
 
     //查询订单
