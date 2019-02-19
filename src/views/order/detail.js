@@ -96,8 +96,8 @@ class OrderDetail extends Component {
                 trackPoint.push(new window.BMap.Point(point.lon, point.lat))
             }
             let polyline = new window.BMap.Polyline(trackPoint, {
-                strokeColor: '#0075c7',
-                strokeWeight: 3,
+                strokeColor: '#000000',
+                strokeWeight: 4,
                 strokeOpacity: 1
             })
             this.map.addOverlay(polyline)
@@ -113,10 +113,10 @@ class OrderDetail extends Component {
             trackPoint.push(new window.BMap.Point(point.lon, point.lat))
         }
         let polygon = new window.BMap.Polygon(trackPoint, {
-            strokeColor: '#CE0000',
+            strokeColor: '#7b7dff',
             strokeWeight: 4,
             strokeOpacity: 1,
-            fillColor: '#ff8605'
+            fillColor: '#fdfdfd'
         })
         this.map.addOverlay(polygon)
     }

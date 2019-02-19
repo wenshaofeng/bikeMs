@@ -1,12 +1,11 @@
 import React, { Component } from 'react'
 import { Card, Button, Table, Form, Select, Modal, message, DatePicker } from 'antd'
+import BaseForm from '../../components/baseForm'
 import axios from './../../axios/index'
 import Utils from './../../utils/utils'
 import './../../style/common.less'
 
 const FormItem = Form.Item
-const Option = Select.Option
-const { RangePicker } = DatePicker;
 
 class Order extends Component {
     constructor(props) {
@@ -18,6 +17,42 @@ class Order extends Component {
         this.params = {
             page: 1
         }
+        this.orderFormList = [
+            {   
+                type: 'SELECT',
+                label: '城市',
+                field: 'city_id',
+                initialValue: '0',
+                width: 100,
+                placeholder: '全部',
+                list: [
+                    { id: '0', name: '全部' },
+                    { id: '1', name: '北京' },
+                    { id: '2', name: '天津' },
+                    { id: '3', name: '上海' },
+                    { id: '4', name: '深圳' }
+                ]
+            },
+            {
+                type: '时间查询', 
+                field: 'time'
+            },
+            {   
+                type: 'SELECT',
+                label: '订单状态',
+                field: 'order_status',
+                initialValue: '0',
+                width: 120,
+                placeholder: '全部',
+                list: [
+                    { id: '0', name: '全部' },
+                    { id: '1', name: '进行中' },
+                    { id: '2', name: '行程结束' }
+                ]
+            }
+
+
+        ]
     }
 
     componentDidMount() {
@@ -140,17 +175,17 @@ class Order extends Component {
     }
 
     //打开订单详情页
-	openOrderDetails = () => {
-		let item = this.state.selectedItem
-		if (!item) {
-			Modal.info({
-				title: '提示',
-				content: '请先选择一条订单'
-			})
-			return
-		}
-		window.open(`/#/common/order/detail/${item.id}/${item.user_name}/${item.order_sn}`, '_blank')
-	}
+    openOrderDetails = () => {
+        let item = this.state.selectedItem
+        if (!item) {
+            Modal.info({
+                title: '提示',
+                content: '请先选择一条订单'
+            })
+            return
+        }
+        window.open(`/#/common/order/detail/${item.id}/${item.user_name}/${item.order_sn}`, '_blank')
+    }
 
     render() {
         const columns = [
@@ -235,7 +270,7 @@ class Order extends Component {
         return (
             <div>
                 <Card>
-                    <FilterForm search={this.handleSearch.bind(this)} />
+                    <BaseForm formList={this.orderFormList} filterSubmit={this.handleSearch.bind(this)} />
                 </Card>
 
                 <Card style={{ marginTop: 10 }}>
@@ -293,87 +328,6 @@ class Order extends Component {
     }
 }
 
-class FilterForm extends Component {
-    handleReset = () => {
-        this.props.form.resetFields()
-    }
 
-    handleSearchClick = () => {
-        this.props.search(this.props.form.getFieldsValue())
-    }
 
-    render() {
-        const { getFieldDecorator } = this.props.form
-
-        return (
-            <Form layout="inline">
-                <FormItem label="城市">
-                    {getFieldDecorator('city_id')(
-                        <Select
-                            style={{
-                                width: 100
-                            }}
-                            placeholder="全部"
-                        >
-                            <Option value=""> 全部 </Option>
-                            <Option value="1"> 北京市 </Option>
-                            <Option value="2"> 天津市 </Option>
-                            <Option value="3"> 深圳市 </Option>
-                        </Select>
-                    )}
-                </FormItem>
-
-                <FormItem label="订单时间">
-                    {getFieldDecorator('start_time')(
-                        <DatePicker
-                            showTime
-                            format="YYYY-MM-DD HH:mm:ss"
-                            placeholder="选择开始时间"
-                            style={{
-                                width: 180
-                            }} />
-                    )}
-                    <label style={{ marginLeft: 10 }} >  ~ </label>
-                    {getFieldDecorator('end_time')(
-                        <DatePicker
-                            showTime
-                            format="YYYY-MM-DD HH:mm:ss"
-                            placeholder="选择结束时间"
-                            style={{ marginLeft: 10, width: 180 }} />
-                    )}
-                </FormItem>
-
-                <FormItem label="订单状态">
-                    {getFieldDecorator('op_mode')(
-                        <Select
-                            placeholder="全部"
-                            style={{
-                                width: 120
-                            }}
-                        >
-                            <Option value=""> 全部 </Option>
-                            <Option value="1"> 进行中 </Option>
-                            <Option value="2"> 行程结束 </Option>
-                        </Select>
-                    )}
-                </FormItem>
-
-                <FormItem>
-                    <Button
-                        type="primary"
-                        style={{
-                            margin: '0 20px'
-                        }}
-                        onClick={this.handleSearchClick}
-                    >
-                        查询
-					</Button>
-                    <Button onClick={this.handleReset}> 重置 </Button>
-                </FormItem>
-            </Form>
-        )
-    }
-}
-
-FilterForm = Form.create({})(FilterForm)
 export default Order;

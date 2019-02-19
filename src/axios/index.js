@@ -34,7 +34,7 @@ export default class Axios {
                 url: options.url,
                 method: 'get',
                 baseURL: baseApi,
-                timeout: 5000,
+                // timeout: 5000,
                 params: (options.data && options.data.params) || ''
             }).then(response => {
                 //隐藏loading效果
