@@ -14,7 +14,7 @@ export default class Axios {
             url,
             data
         }).then((data) => {
-            if (data) {
+            if (data && data.result) {
                 let list = data.result.item_list.map((item, index) => {
                     item.key = index
                     return item
@@ -55,10 +55,8 @@ export default class Axios {
             loading = document.getElementById('ajaxLoading')
             loading.style.display = 'block'
         }
-        console.log(options);
-
         let baseApi = ''
-        if (options.isMock) { //Mock 环境
+        if (options.data.isMock) { //Mock 环境
             baseApi = 'https://www.easy-mock.com/mock/5c4e75d6afd3a07bd7b6ec70/mockapi'
         } else {    // 真实环境
             baseApi = 'https://www.easy-mock.com/mock/5c4e75d6afd3a07bd7b6ec70/mockapi'

@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Card, Button, Table, Form, Select, Modal, message, DatePicker } from 'antd'
 import BaseForm from '../../components/baseForm'
+import ETable from '../../components/ETable'
 import axios from './../../axios/index'
 import Utils from './../../utils/utils'
 import './../../style/common.less'
@@ -282,7 +283,14 @@ class Order extends Component {
                 </Card>
 
                 <div className="content-wrap">
-                    <Table
+                    <ETable
+                        columns={columns}
+                        dataSource={this.state.list}
+                        pagination={this.state.pagination}
+                        selectedRowKeys={this.state.selectedRowKeys}
+                        updateSelectedItem={Utils.updateSelectedItem.bind(this)}
+                    />
+                    {/* <Table
                         bordered
                         columns={columns}
                         dataSource={this.state.list}
@@ -295,7 +303,7 @@ class Order extends Component {
                                 }
                             }
                         }}
-                    />
+                    /> */}
                 </div>
 
                 <Modal
