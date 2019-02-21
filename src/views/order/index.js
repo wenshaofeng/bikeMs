@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Card, Button, Table, Form,Modal, message } from 'antd'
+import { Card, Button, Table, Form, Modal, message } from 'antd'
 import BaseForm from '../../components/baseForm'
 import ETable from '../../components/ETable'
 import axios from './../../axios/index'
@@ -259,10 +259,7 @@ class Order extends Component {
             }
         ]
 
-        const formItemLayout = {
-            labelCol: { span: 8 },
-            wrapperCol: { span: 16 }
-        }
+
         // const selectedRowKeys = this.state.selectedRowKeys
 
         // const rowSelection = {
@@ -292,7 +289,7 @@ class Order extends Component {
                         selectedRowKeys={this.state.selectedRowKeys}
                         selectedItem={this.state.selectedItem}
                         selectedIds={this.state.selectedIds}
-                        // rowSelection={'checkbox'}
+                    // rowSelection={'checkbox'}
                     />
                     {/* <Table
                         bordered
@@ -321,26 +318,40 @@ class Order extends Component {
                     onOk={this.handleFinishOrder}
                     width={400}
                 >
-                    <Form layout="horizontal">
-                        <FormItem {...formItemLayout} label="车辆编号">
-                            {this.state.orderInfo.bike_sn}
-                        </FormItem>
-                        <FormItem {...formItemLayout} label="剩余电量">
-                            {this.state.orderInfo.battery + '%'}
-                        </FormItem>
-                        <FormItem {...formItemLayout} label="行程开始时间">
-                            {this.state.orderInfo.start_time}
-                        </FormItem>
-                        <FormItem {...formItemLayout} label="当前位置">
-                            {this.state.orderInfo.location}
-                        </FormItem>
-                    </Form>
+                    < FinishOrderForm {...this.state.orderInfo} />
                 </Modal>
             </div>
         );
     }
 }
 
+//结束订单子组件
+class FinishOrderForm extends Component {
+    render() {
+        const { bike_sn, battery, start_time, location } = this.props;
+        const formItemLayout = {
+            labelCol: { span: 8 },
+            wrapperCol: { span: 16 }
+        }
+        return (
+            <Form layout="horizontal">
+                <FormItem {...formItemLayout} label="车辆编号">
+                    {bike_sn}
+                </FormItem>
+                <FormItem {...formItemLayout} label="剩余电量">
+                    {battery + '%'}
+                </FormItem>
+                <FormItem {...formItemLayout} label="行程开始时间">
+                    {start_time}
+                </FormItem>
+                <FormItem {...formItemLayout} label="当前位置">
+                    {location}
+                </FormItem>
+            </Form>
+        )
+    }
+}
 
+FinishOrderForm = Form.create({})(FinishOrderForm)
 
 export default Order;

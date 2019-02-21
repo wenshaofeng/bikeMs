@@ -45,16 +45,20 @@ class FilterForm extends Component {
                 else if (item.type === 'INPUT') { //Input框
                     const INPUT = (
                         <FormItem label={label} key={field}>
-                            {getFieldDecorator( field , {
+                            {getFieldDecorator(field, {
                                 initialValue: initialValue,
-                            })(<Input type="text" placeholder={placeHolder} />)}
+                            })(<Input type="text"
+                                placeholder={placeHolder}
+                                style={{
+                                    width: width
+                                }} />)}
                         </FormItem>
                     )
                     formItemList.push(INPUT)
                 } else if (item.type === 'SELECT') { //单选框
-                    const SELECT = 
+                    const SELECT =
                         <FormItem label={label} key={field}>
-                            {getFieldDecorator( field, {
+                            {getFieldDecorator(field, {
                                 initialValue: initialValue,
                             })(
                                 <Select
@@ -66,21 +70,30 @@ class FilterForm extends Component {
                                     {Utils.getOptionList(item.list)}
                                 </Select>
                             )}
-                        </FormItem>        
+                        </FormItem>
 
                     formItemList.push(SELECT)
                 } else if (item.type === 'CHECKBOX') { //复选框
-                    const CHECKBOX = 
+                    const CHECKBOX =
                         <FormItem label={label} key={field}>
                             {
-                                getFieldDecorator([field], {
+                                getFieldDecorator(field, {
                                     valuePropName: 'checked',
                                     initialValue: initialValue // true | false
                                 })(<Checkbox>{label}</Checkbox>)
                             }
                         </FormItem>
-                    
+
                     formItemList.push(CHECKBOX)
+                } else if (item.type == 'DATE') {
+                    const Date = <FormItem label={label} key={field}>
+                        {
+                            getFieldDecorator([field])(
+                                <DatePicker showTime={true} placeholder={placeHolder} format="YYYY-MM-DD HH:mm:ss" />
+                            )
+                        }
+                    </FormItem>;
+                    formItemList.push(Date);
                 }
             })
         }

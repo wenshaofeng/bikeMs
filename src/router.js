@@ -27,6 +27,7 @@ import AdvancedTable from './views/table/advancedTable';
 
 import City from './views/city'  //城市管理
 import Order from './views/order' //订单管理
+import User from './views/user' //员工管理
 
 import Common from './common' //通用页面组件
 import OrderDetail from './views/order/detail' //订单详情
@@ -57,6 +58,7 @@ class IRouter extends Component {
                                 <Route path='/admin/table/high' component={AdvancedTable} />
                                 <Route path='/admin/city' component={City} />
                                 <Route path='/admin/order' component={Order} />
+                                <Route path='/admin/user' component={User} />
                                 {/* <Route path='/admin' component={Home} /> */}
                                 <Route component={NoMatch} />
                             </Switch>

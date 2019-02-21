@@ -1,4 +1,4 @@
-// src/components/ETable/index.js
+
 import React from 'react'
 import { Table } from 'antd'
 import "./index.less"
