@@ -66,9 +66,7 @@ class FilterForm extends Component {
                                     {Utils.getOptionList(item.list)}
                                 </Select>
                             )}
-                        </FormItem>
-                    
-                    console.log(SELECT);
+                        </FormItem>        
 
                     formItemList.push(SELECT)
                 } else if (item.type === 'CHECKBOX') { //复选框

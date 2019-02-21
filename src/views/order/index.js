@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Card, Button, Table, Form, Select, Modal, message, DatePicker } from 'antd'
+import { Card, Button, Table, Form,Modal, message } from 'antd'
 import BaseForm from '../../components/baseForm'
 import ETable from '../../components/ETable'
 import axios from './../../axios/index'
@@ -165,16 +165,16 @@ class Order extends Component {
             })
     }
 
-    //选择某一行订单
-    onRowClick = (record, index) => {
-        let selectKey = [index]
+    // //选择某一行订单
+    // onRowClick = (record, index) => {
+    //     let selectKey = [index]
 
-        this.setState({
-            selectedRowKeys: selectKey,
-            selectedItem: record
-        })
-        console.log(record);
-    }
+    //     this.setState({
+    //         selectedRowKeys: selectKey,
+    //         selectedItem: record
+    //     })
+    //     console.log(record);
+    // }
 
     //打开订单详情页
     openOrderDetails = () => {
@@ -263,11 +263,12 @@ class Order extends Component {
             labelCol: { span: 8 },
             wrapperCol: { span: 16 }
         }
-        const selectedRowKeys = this.state.selectedRowKeys
-        const rowSelection = {
-            type: 'radio',
-            selectedRowKeys
-        }
+        // const selectedRowKeys = this.state.selectedRowKeys
+
+        // const rowSelection = {
+        //     type: 'radio',
+        //     selectedRowKeys
+        // }
 
         return (
             <div>
@@ -284,11 +285,14 @@ class Order extends Component {
 
                 <div className="content-wrap">
                     <ETable
+                        updateSelectedItem={Utils.updateSelectedItem.bind(this)}
                         columns={columns}
                         dataSource={this.state.list}
                         pagination={this.state.pagination}
                         selectedRowKeys={this.state.selectedRowKeys}
-                        updateSelectedItem={Utils.updateSelectedItem.bind(this)}
+                        selectedItem={this.state.selectedItem}
+                        selectedIds={this.state.selectedIds}
+                        // rowSelection={'checkbox'}
                     />
                     {/* <Table
                         bordered
