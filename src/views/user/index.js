@@ -6,10 +6,17 @@ import ETable from './../../components/ETable';
 import BaseForm from './../../components/baseForm';
 import moment from "moment";
 
+const FormItem = Form.Item;
+const RadioGroup = Radio.Group;
+const Option = Select.Option;
+const { TextArea } = Input;
+
 class User extends Component {
     constructor(props) {
         super(props);
-        this.state = {}
+        this.state = {
+            isVisible: false
+        }
         this.params = {
             page: 1
         };
@@ -60,6 +67,27 @@ class User extends Component {
                 title: '创建员工'
             }))
         }
+    }
+
+    //创建员工提交
+    handleSubmit = () => {
+        let type = this.state.type;
+        let data = this.userForm.props.form.getFieldsValue();
+        axios.get({
+            url: type == 'create' ? '/user/add' : '/user/edit',
+            data: {
+                params: data
+            }
+        }).then((res) => {
+            if (res.code === 0) {
+                this.userForm.props.form.resetFields();
+                this.setState({
+                    isVisible: false,
+                    // selectedRowKeys:'' // 查询完后,单选框失去焦点
+                });
+                this.requestList();
+            }
+        });
     }
 
     render() {
@@ -117,6 +145,13 @@ class User extends Component {
             },
         ];
 
+        let footer = {};
+
+        if (this.state.type == 'detail') {
+            footer = {
+                footer: null
+            };
+        }
 
         return (
             <div>
@@ -163,5 +198,96 @@ class User extends Component {
         );
     }
 }
+
+
+//表单子组件
+class UserForm extends Component {
+    getState = (state) => {
+        let config = {
+            '1': "咸🐟一条",
+            '2': '风华浪子',
+            '3': '北大才子一枚',
+            '4': '百度FE',
+            '5': '创业者',
+        }
+        return config[state]
+    }
+
+    render() {
+        let type = this.props.type
+        let userInfo = this.props.userInfo || {}
+        const formItemLayout = {
+            labelCol: { span: 5 },
+            wrapperCol: { span: 19 }
+        }
+        const { getFieldDecorator } = this.props.form
+
+        return (
+            <Form layout="horizontal">
+                <FormItem label="用户名" {...formItemLayout}>
+                    {
+                        userInfo && type === 'detail' ? userInfo.username :
+                            getFieldDecorator('user_name', {
+                                initialValue: userInfo.username
+                            })(
+                                <Input type="text" placeholder="请输入用户名" />
+                            )
+                    }
+                </FormItem>
+                <FormItem label="性别" {...formItemLayout}>
+                    {
+                        userInfo && type === 'detail' ? userInfo.sex == 1 ? '男' : '女' :
+                            getFieldDecorator('sex', {
+                                initialValue: userInfo.sex
+                            })(
+                                <RadioGroup>
+                                    <Radio value={1}>男</Radio>
+                                    <Radio value={2}>女</Radio>
+                                </RadioGroup>
+                            )
+                    }
+                </FormItem>
+                <FormItem label="状态" {...formItemLayout}>
+                    {
+                        userInfo && type === 'detail' ? this.getState(userInfo.state) :
+                            getFieldDecorator('state', {
+                                initialValue: userInfo.state
+                            })(
+                                <Select>
+                                    <Option value={1}>咸🐟一条</Option>
+                                    <Option value={2}>风华浪子</Option>
+                                    <Option value={3}>北大才子一枚</Option>
+                                    <Option value={4}>百度FE</Option>
+                                    <Option value={5}>创业者</Option>
+                                </Select>
+                            )
+                    }
+                </FormItem>
+
+                <FormItem label="生日" {...formItemLayout}>
+                    {
+                        userInfo && type === 'detail' ? userInfo.birthday :
+                            getFieldDecorator('birthday', {
+                                initialValue: moment(userInfo.birthday)
+                            })(
+                                <DatePicker format="YYYY-MM-DD" />
+                            )}
+                </FormItem>
+
+                <FormItem label="联系地址" {...formItemLayout}>
+                    {
+                        userInfo && type === 'detail' ? userInfo.address :
+                            getFieldDecorator('address', {
+                                initialValue: userInfo.address
+                            })(
+                                <TextArea rows={3} placeholder="请输入联系地址" />
+                            )}
+                </FormItem>
+            </Form>
+        );
+    }
+}
+
+UserForm = Form.create({})(UserForm);
 
 export default User;
