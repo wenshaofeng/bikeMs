@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, Button, Modal, Form, Input, Radio, Select, DatePicker } from "antd";
+import { Card, Button, Modal, Form, Input, Radio, Select, DatePicker, message } from "antd";
 import axios from './../../axios';
 import Utils from './../../utils/utils';
 import ETable from './../../components/ETable';
@@ -60,12 +60,79 @@ class User extends Component {
     //功能区操作
     handleOperate = (type) => {
         let item = this.state.selectedItem
+
+        console.log(item);
+
         if (type === 'create') {
             this.setState(() => ({
                 type,
                 isVisible: true,
                 title: '创建员工'
             }))
+        } else if (type === 'edit') { //编辑员工
+
+            if (!item) {
+                Modal.info({
+                    title: '温馨提示',
+                    content: '请先选择一个员工'
+                })
+                return
+            }
+            this.setState(() => ({
+                type,
+                isVisible: true,
+                title: '编辑员工信息',
+                userInfo: item
+            }))
+
+        } else if (type === 'detail') { //员工详情信息
+
+            if (!item) {
+                Modal.info({
+                    title: '温馨提示',
+                    content: '请先选择一个员工'
+                })
+                return
+            }
+            this.setState(() => ({
+                type,
+                isVisible: true,
+                title: '员工详情信息',
+                userInfo: item
+            }))
+        } else { // 删除员工
+
+            if (!item) {
+                Modal.info({
+                    title: '温馨提示',
+                    content: '请先选择一个员工'
+                })
+                return
+            }
+            let _this = this;
+            Modal.confirm({
+                title: '确认删除',
+                content: `是否要删除当前选中的员工 ${item.username} ${item.sex === 1?'男':'女'}` ,
+                onOk() {
+                    axios.get({
+                        url: '/user/delete',
+                        data: {
+                            params: {
+                                id: item.id
+                            }
+                        }
+                    }).then((res) => {
+                        if (res.code == 0) {
+                            _this.setState({
+                                isVisible: false,
+                                selectedRowKeys:'' // 点击删除,单选框失去焦点:  空: null ''   参考网址https://blog.csdn.net/oscar999/article/details/9353713
+                            });
+                            message.success(`${res.result}`)
+                            _this.requestList();
+                        }
+                    });
+                }
+            });
         }
     }
 
@@ -74,7 +141,7 @@ class User extends Component {
         let type = this.state.type;
         let data = this.userForm.props.form.getFieldsValue();
         axios.get({
-            url: type == 'create' ? '/user/add' : '/user/edit',
+            url: type === 'create' ? '/user/add' : '/user/edit',
             data: {
                 params: data
             }
@@ -85,7 +152,9 @@ class User extends Component {
                     isVisible: false,
                     // selectedRowKeys:'' // 查询完后,单选框失去焦点
                 });
+                message.success(`${res.result}`)
                 this.requestList();
+
             }
         });
     }
@@ -102,7 +171,7 @@ class User extends Component {
                 title: '性别',
                 dataIndex: 'sex',
                 render(sex) {
-                    return sex == 1 ? '男' : '女';
+                    return sex === 1 ? '男' : '女';
                 }
             }, {
                 title: '状态',
@@ -147,7 +216,7 @@ class User extends Component {
 
         let footer = {};
 
-        if (this.state.type == 'detail') {
+        if (this.state.type === 'detail') {
             footer = {
                 footer: null
             };
@@ -188,6 +257,7 @@ class User extends Component {
                             userInfo: ''
                         });
                     }}
+                    style={{ top: 20 }}
                     width={600}
                     {...footer}
                 >
@@ -236,7 +306,7 @@ class UserForm extends Component {
                 </FormItem>
                 <FormItem label="性别" {...formItemLayout}>
                     {
-                        userInfo && type === 'detail' ? userInfo.sex == 1 ? '男' : '女' :
+                        userInfo && type === 'detail' ? userInfo.sex === 1 ? '男' : '女' :
                             getFieldDecorator('sex', {
                                 initialValue: userInfo.sex
                             })(
