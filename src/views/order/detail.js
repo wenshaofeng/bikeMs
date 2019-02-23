@@ -49,7 +49,7 @@ class OrderDetail extends Component {
         this.addMapControl()
         // 调用路线图绘制方法
         this.drawBikeRoute(result.position_list)
-        //     // 调用服务区绘制方法
+        // 调用服务区绘制方法
         this.drawServiceArea(result.area)
     }
 
@@ -72,7 +72,7 @@ class OrderDetail extends Component {
             
             let startIcon = new window.BMap.Icon('/assets/start_point.png', new window.BMap.Size(36, 42), {
                 imageSize: new window.BMap.Size(36, 42),
-                anchor: new window.BMap.Size(36, 42)
+                anchor: new window.BMap.Size(18, 42)
             })
             let startMarker = new window.BMap.Marker(startPoint, { icon: startIcon })
             this.map.addOverlay(startMarker)
@@ -83,7 +83,7 @@ class OrderDetail extends Component {
             console.log(endPoint);
             let endIcon = new window.BMap.Icon('/assets/end_point.png', new window.BMap.Size(36, 42), {
                 imageSize: new window.window.BMap.Size(36, 42),
-                anchor: new window.BMap.Size(36, 42)
+                anchor: new window.BMap.Size(18, 42)
             })
             let endMarker = new window.BMap.Marker(endPoint, { icon: endIcon })
             this.map.addOverlay(endMarker)
