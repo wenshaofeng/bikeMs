@@ -33,6 +33,10 @@ import BikeMap from './views/bikeMap' //车辆地图
 import Common from './common' //通用页面组件
 import OrderDetail from './views/order/detail' //订单详情
 
+import Bar from './views/echarts/bar' // 柱形图
+import Pie from './views/echarts/pie' // 饼图
+import Line from './views/echarts/line' // 折线图
+
 class IRouter extends Component {
     render() {
         return (
@@ -61,6 +65,9 @@ class IRouter extends Component {
                                 <Route path='/admin/order' component={Order} />
                                 <Route path='/admin/user' component={User} />
                                 <Route path='/admin/bikeMap' component={BikeMap} />
+                                <Route path='/admin/charts/bar' component={Bar} />
+                                <Route path='/admin/charts/pie' component={Pie} />
+                                <Route path='/admin/charts/line' component={Line} />
                                 {/* <Route path='/admin' component={Home} /> */}
                                 <Route component={NoMatch} />
                             </Switch>

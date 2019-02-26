@@ -13,9 +13,11 @@ class BikeMap extends Component {
         this.map = ''
         this.bikeMapFormList = [
             {
-                type: '城市'
+                type: '城市',
+                field:'city'
             }, {
-                type: '时间查询'
+                type: '时间查询',
+                field:'search_time'
             }, {
                 type: 'SELECT',
                 label: '订单状态',
@@ -112,8 +114,6 @@ class BikeMap extends Component {
             let first = route_list[0]
             let p = first.split(',')
             let startPoint = new window.BMap.Point(p[0], p[1])
-            console.log(startPoint);
-
             let startPointIcon = new window.BMap.Icon('/assets/start_point.png', new window.BMap.Size(36, 42), {
                 imageSize: new window.BMap.Size(36, 42),
                 anchor: new window.BMap.Size(18, 42) //偏移
@@ -125,7 +125,6 @@ class BikeMap extends Component {
             let last = route_list[route_list.length - 1]
             let q = last.split(',')
             let endPoint = new window.BMap.Point(q[0], q[1])
-            console.log(endPoint);
             let endPointIcon = new window.BMap.Icon('/assets/end_point.png', new window.BMap.Size(36, 42), {
                 imageSize: new window.window.BMap.Size(36, 42),
                 anchor: new window.BMap.Size(18, 42)
@@ -141,7 +140,6 @@ class BikeMap extends Component {
             let trackPoint = []
             for (let i = 0; i < route_list.length; i++) {
                 let point = route_list[i].split(',')
-                console.log(point);
                 trackPoint.push(new window.BMap.Point(point[0], point[1]))
             }
             let polyline = new window.BMap.Polyline(trackPoint, {
@@ -171,7 +169,6 @@ class BikeMap extends Component {
     }
 
     drawBikeIcon = (bike_List) => {// 添加地图中的自行车图标
-        console.log(bike_List);
         
         let bikeIcon = new window.BMap.Icon('/assets/bike.jpg', new window.BMap.Size(36, 42), {
             imageSize: new window.BMap.Size(36, 42),
