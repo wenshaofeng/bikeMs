@@ -29,6 +29,7 @@ import City from './views/city'  //城市管理
 import Order from './views/order' //订单管理
 import User from './views/user' //员工管理
 import BikeMap from './views/bikeMap' //车辆地图
+import RichText from './views/rich' // 富文本
 
 import Common from './common' //通用页面组件
 import OrderDetail from './views/order/detail' //订单详情
@@ -68,6 +69,7 @@ class IRouter extends Component {
                                 <Route path='/admin/charts/bar' component={Bar} />
                                 <Route path='/admin/charts/pie' component={Pie} />
                                 <Route path='/admin/charts/line' component={Line} />
+                                <Route path='/admin/rich' component={RichText} />
                                 {/* <Route path='/admin' component={Home} /> */}
                                 <Route component={NoMatch} />
                             </Switch>

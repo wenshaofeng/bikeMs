@@ -10,7 +10,7 @@ class Footer extends Component {
         return (
             <div className='footer'>
                 Welcome To  
-                <a href="https://github.com/wenshaofeng" target="_blank"> My Github </a>
+                <a href="https://github.com/wenshaofeng" target="_blank">  My Github </a>
             </div>
         );
     }
