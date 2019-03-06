@@ -4,9 +4,11 @@ import { Card, Button, Modal, Form, Select, Input, Tree, Transfer, message } fro
 import ETable from './../../components/ETable'
 import axios from './../../axios'
 import Utils from './../../utils/utils'
+import data from './../../config/menuConfig'
 
 const FormItem = Form.Item
 const Option = Select.Option
+const { TreeNode } = Tree
 
 class Permission extends Component {
     constructor(props) {
@@ -22,10 +24,9 @@ class Permission extends Component {
 
     componentDidMount() {
         this.requestList()
-        // axios.requestList(this, '/role/list', {})
     }
 
-    requestList = () => {
+    requestList = () => { // 请求权限列表数据
         axios.requestList(this, '/role/list', {})
     }
 
@@ -55,6 +56,46 @@ class Permission extends Component {
                 }
             })
 
+    }
+
+    OpenSettingPermissions = () => { //权限设置弹框
+        let item = this.state.selectedItem
+        if (!item) {
+            Modal.info({
+                title: '温馨提示',
+                content: '请选择一个角色'
+            })
+            return
+        }
+        this.setState(() => ({
+            isPermVisible: true,
+            detailInfos: item,
+            menus: item.menus
+        }))
+    }
+
+    handleSettingPremission = ()=>{ // 提交权限设置
+        let data = this.permForm.props.form.getFieldsValue()
+		data.role_id = this.state.selectedItem.id
+		data.menus = this.state.menus
+		axios
+			.get({
+				url: '/permission/edit',
+				data: {
+					params: {
+						...data
+					}
+				}
+			})
+			.then((res) => {
+				if (res.code === 0) {
+                    message.success(`${res.result}`)
+					this.setState({
+						isPermVisible: false
+					})
+					this.requestList(this, '/role/list', {})
+				}
+			})
     }
 
     render() {
@@ -102,7 +143,7 @@ class Permission extends Component {
                     <Button type="primary" onClick={this.handleCreateRole}>
                         创建角色
 					</Button>
-                    <Button type="primary" style={{ marginLeft: 10, marginRight: 10 }}>
+                    <Button type="primary" onClick={this.OpenSettingPermissions} style={{ marginLeft: 10, marginRight: 10 }}>
                         设置权限
 					</Button>
                     <Button type="primary">
@@ -134,6 +175,30 @@ class Permission extends Component {
                 >
                     <RoleForm wrappedComponentRef={(inst) => (this.roleForm = inst)} />
                 </Modal>
+
+                <Modal
+                    width={600}
+                    title="权限设置"
+                    visible={this.state.isPermVisible}
+                    onOk={this.handleSettingPremission}
+                    onCancel={() => {
+                        this.setState({
+                            isPermVisible: false
+                        })
+                    }}
+
+                >
+                    <PermEditForm
+                        detailInfo={this.state.detailInfos}
+                        menuInfo={this.state.menus}
+                        patchMenuInfo={(checkedKeys) => {
+                            this.setState(() => ({
+                                menus: checkedKeys
+                            }))
+                        }}
+                        wrappedComponentRef={(inst) => (this.permForm = inst)}
+                    />
+                </Modal>
             </Fragment>
         );
     }
@@ -141,9 +206,7 @@ class Permission extends Component {
 
 export default Permission;
 
-
-
-class RoleForm extends Component {
+class RoleForm extends Component { // 创建角色表单子组件
     render() {
         const formItemLayout = {
             labelCol: { span: 5 },
@@ -171,5 +234,65 @@ class RoleForm extends Component {
         );
     }
 }
-
 RoleForm = Form.create({})(RoleForm)
+
+class PermEditForm extends Component { // 权限设置表单子组件
+
+    renderTreeNodes = data => data.map((item) => { // 遍历、展开所有树形节点
+        if (item.children) {
+            return (
+                <TreeNode title={item.title} key={item.key} dataRef={item}>
+                    {this.renderTreeNodes(item.children)}
+                </TreeNode>
+            );
+        } else {
+            return <TreeNode {...item} />
+        }
+    })
+
+    onCheck = (checkedKeys) => {
+        this.props.patchMenuInfo(checkedKeys)
+    }
+
+    render() {
+        const formItemLayout = {
+            labelCol: { span: 5 },
+            wrapperCol: { span: 15 }
+        }
+        const { getFieldDecorator } = this.props.form
+        const detail_Info = this.props.detailInfo
+        const menu_Info = this.props.menuInfo
+        return (
+            <Fragment>
+                <Form layout="horizontal">
+                    <FormItem label="角色名称" {...formItemLayout}>
+                        <Input type="text" disabled placeholder={detail_Info.role_name} />
+                    </FormItem>
+                    <FormItem label="状态" {...formItemLayout}>
+                        {getFieldDecorator('status', {
+                            initialValue: "1"
+                        })(
+                            <Select >
+                                <Option value="1">启用</Option>
+                                <Option value="0">停用</Option>
+                            </Select>
+                        )}
+                    </FormItem>
+                </Form>
+                <Tree
+                    checkable
+                    defaultExpandAll
+                    onCheck={(checkedKeys) => {
+                        this.onCheck(checkedKeys)
+                    }}
+                    checkedKeys={menu_Info}
+                >
+                    <TreeNode title="平台权限" key="platform_all">
+                        {this.renderTreeNodes(data)}
+                    </TreeNode>
+                </Tree>
+            </Fragment>
+        )
+    }
+}
+PermEditForm = Form.create({})(PermEditForm)
