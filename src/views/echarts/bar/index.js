@@ -98,7 +98,7 @@ class Bar extends Component {
         return (
             <Fragment>
                 <Card title="柱形图：一">
-                    <ReactEcharts option={this.getOption1()} theme='Imooc' style={{ height: 400 }} />
+                    <ReactEcharts option={this.getOption1()} theme='Imooc' style={{ height: 500 }} />
                 </Card>
 
                 <Card title="柱形图：二" style={{ marginTop: 20 }}>
