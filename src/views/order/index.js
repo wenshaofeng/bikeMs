@@ -58,6 +58,7 @@ class Order extends Component {
 
     componentDidMount() {
         this.requestList()
+        sessionStorage.setItem('j', 's')
     }
 
     requestList = () => {

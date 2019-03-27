@@ -5,7 +5,14 @@ import ReactDOM from 'react-dom';
 // import Router2 from './views/router_demo/route2'
 import Router from './router'
 // import Life from './views/demos/Life'
+import { Provider } from 'react-redux'
+import store from './store/index'
 
-ReactDOM.render(<Router />, document.getElementById('root'));
+ReactDOM.render(
+    <Provider store={store} >
+        <Router />
+    </Provider>
+    ,
+    document.getElementById('root'));
 
 

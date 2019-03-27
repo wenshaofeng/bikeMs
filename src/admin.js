@@ -13,6 +13,7 @@ class Admin extends Component {
         this.state = {}
     }
     render() {
+        
         return (
             <Row className='container'>
                 <Col span={4} className='nav-left'>

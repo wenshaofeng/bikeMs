@@ -19,6 +19,9 @@ class OrderDetail extends Component {
         if (params.orderId) {
             this.getDetailInfo(params.orderId)
         }
+        console.log( sessionStorage.getItem('j'));
+        
+       
     }
 
     getDetailInfo = (orderId) => {
@@ -68,7 +71,7 @@ class OrderDetail extends Component {
             // 绘制起点坐标icon
             let first = position_list[0]
             let startPoint = new window.BMap.Point(first.lon, first.lat)
-            console.log(startPoint);
+           
             
             let startIcon = new window.BMap.Icon('/assets/start_point.png', new window.BMap.Size(36, 42), {
                 imageSize: new window.BMap.Size(36, 42),
@@ -80,7 +83,6 @@ class OrderDetail extends Component {
             // 绘制终点坐标icon
             let last = position_list[position_list.length - 1]
             let endPoint = new window.BMap.Point(last.lon, last.lat)
-            console.log(endPoint);
             let endIcon = new window.BMap.Icon('/assets/end_point.png', new window.BMap.Size(36, 42), {
                 imageSize: new window.window.BMap.Size(36, 42),
                 anchor: new window.BMap.Size(18, 42)
@@ -91,8 +93,7 @@ class OrderDetail extends Component {
             //绘制行驶路线
             let trackPoint = []
             for (let i = 0; i < position_list.length; i++) {
-                let point = position_list[i]
-                console.log(point);             
+                let point = position_list[i]            
                 trackPoint.push(new window.BMap.Point(point.lon, point.lat))
             }
             let polyline = new window.BMap.Polyline(trackPoint, {

@@ -2,16 +2,27 @@ import React, { Component, Fragment } from 'react';
 import MenuConfig from './../../config/menuConfig'
 import { Menu, Icon } from 'antd' // 获取菜单
 import { NavLink } from 'react-router-dom'
+import { connect } from 'react-redux'
+import { switchMenu } from '../../store/actionCreator'
 import './index.less'
 
 const SubMenu = Menu.SubMenu  // 子菜单
 class NavLeft extends Component {
-    componentWillMount() {
-        const menuTreeNode = this.renderMenu(MenuConfig)
-        this.setState((preState) => ({
-            menuTreeNode
-        }))
+    state = {
+        currentKey: ''
     }
+    componentDidMount() { 
+        const menuTreeNode = this.renderMenu(MenuConfig)
+        let currentKey = window.location.hash.replace(/#|\?.*$/g, '')
+
+        this.setState((preState) => ({
+            menuTreeNode,
+            currentKey
+        }))
+
+    }
+
+
     // 菜单渲染
     renderMenu = (data) => {
         return data.map((item) => {
@@ -31,6 +42,17 @@ class NavLeft extends Component {
             )
         })
     }
+    //菜单点击切换高亮
+    handleChangeMenu = ({ item }) => {
+        const { dispatch } = this.props
+        dispatch(switchMenu(item.props.title))
+        console.log(item);
+
+        this.setState((preState) => ({
+            currentKey: item.props.eventKey
+        }))
+    }
+
 
     render() {
         return (
@@ -39,7 +61,11 @@ class NavLeft extends Component {
                     <img src="/assets/logo-ant.svg" alt="" />
                     <h1>Imooc MS</h1>
                 </div>
-                <Menu theme='dark'>
+                <Menu
+                    onSelect={this.handleSelectedMenuItem}
+                    onClick={this.handleChangeMenu}
+                    theme='dark'
+                    selectedKeys={[this.state.currentKey]}>
                     {this.state.menuTreeNode}
                 </Menu>
             </Fragment>
@@ -47,4 +73,4 @@ class NavLeft extends Component {
     }
 }
 
-export default NavLeft;
+export default connect()(NavLeft);
