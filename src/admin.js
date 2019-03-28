@@ -12,6 +12,10 @@ class Admin extends Component {
         super(props);
         this.state = {}
     }
+    componentDidMount(){
+        let params = this.props
+        console.log(params);
+    }
     render() {
         
         return (

@@ -3,6 +3,8 @@ import axios from 'axios'
 import Utils from '../utils/utils.js'
 import { Modal } from 'antd';
 
+
+
 export default class Axios {
 
     static requestList(_this, url, params, isMock) {  //请求表格列表信息
@@ -50,6 +52,8 @@ export default class Axios {
     }
 
     static get(options) {
+
+
         let loading
         if (options.data && options.data.isShowLoading !== false) {
             loading = document.getElementById('ajaxLoading')
@@ -62,6 +66,17 @@ export default class Axios {
             baseApi = 'https://www.easy-mock.com/mock/5c4e75d6afd3a07bd7b6ec70/mockapi'
         }
         return new Promise((resolve, reject) => {
+            axios.interceptors.request.use(config => {
+
+
+                config.headers.common['Authorization'] = 'token';
+
+                return config
+            },
+                error => {
+                    return Promise.reject(error)
+                })
+
             axios({
                 url: options.url,
                 method: 'get',
@@ -90,6 +105,56 @@ export default class Axios {
                     reject(response.data)
                 }
             })
+        })
+    }
+
+   
+
+    static login(options) {
+
+
+        let loading
+        if (options.data && options.data.isShowLoading !== false) {
+            loading = document.getElementById('ajaxLoading')
+            loading.style.display = 'block'
+        }
+        let baseApi = ''
+        if (options.data.isMock) { //Mock 环境
+            baseApi = 'https://www.easy-mock.com/mock/5c4e75d6afd3a07bd7b6ec70/mockapi'
+        } else {    // 真实环境
+            baseApi = 'https://www.easy-mock.com/mock/5c4e75d6afd3a07bd7b6ec70/mockapi'
+        }
+        return new Promise((resolve, reject) => {
+
+            axios({
+                url: options.url,
+                method: 'post',
+                baseURL: baseApi,
+                // timeout: 5000,
+                data: options.data || ''
+            }).then(response => {
+                //隐藏loading效果
+                if (options.data && options.data.isShowLoading !== false) {
+                    loading = document.getElementById('ajaxLoading')
+                    loading.style.display = 'none'
+                }
+
+                if (response.status === 200) {
+                    let res = response.data
+                    if (res.code === 0) {
+
+                        resolve(res)
+                    } else {
+                        Modal.info({
+                            title: '提示',
+                            content: res.msg
+                        })
+                    }
+                } else {
+                    reject(response.data)
+                }
+            })
+
         })
     }
 

@@ -4,6 +4,7 @@ import moment from 'moment'
 import axios from '../../axios'
 import { connect } from 'react-redux'
 import MenuConfig from './../../config/menuConfig'
+import { NavLink } from 'react-router-dom'
 import './index.less'
 
 class Header extends Component {
@@ -72,13 +73,15 @@ class Header extends Component {
                     }
                     <Col span={menuType ? 18 : 24}>
                         <span>欢迎，{this.state.userName}</span>
-                        <a href='#'>退出</a>
+                        <NavLink to='/login'>
+                           退出
+                        </NavLink>
                     </Col>
                 </Row>
                 {
                     menuType ? ('') : (<Row className='breadcrumb'>
                         <Col span={4} className='breadcrumb-title'>
-                            {menuName?menuName:this.state.title}
+                            {menuName ? menuName : this.state.title}
                         </Col>
                         <Col span={20} className='weather'>
                             <span className='date'>{this.state.sysTime}</span>
