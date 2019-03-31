@@ -1,10 +1,11 @@
 import React, { Component, Fragment } from 'react';
-import { Row, Col } from 'antd'
+import { Row, Col, Modal } from 'antd'
 import moment from 'moment'
 import axios from '../../axios'
 import { connect } from 'react-redux'
+import { handleLogout } from '../../store/actionCreator'
 import MenuConfig from './../../config/menuConfig'
-import { NavLink } from 'react-router-dom'
+
 import './index.less'
 
 class Header extends Component {
@@ -57,12 +58,41 @@ class Header extends Component {
             }
         })
     }
+
+    handleLogout = (type) => {
+        const { dispatch } = this.props
+        console.log(typeof type); // String
+        let _that = this
+        Modal[type]({
+            title: '确认？',
+            content: '你确定要退出账号吗？',
+
+            //调接口的地方
+            onOk() {
+                localStorage.removeItem('token')
+                dispatch(handleLogout(localStorage.getItem('token')))
+            },
+            onCancel() {
+                console.log('Cancel')
+            }
+        })
+    }
+
     render() {
         const menuType = this.props.menuType
         const menuName = this.props.menuName
-
         return (
             <div className='header'>
+                <Modal
+                    title='React'
+                    visible={this.state.showLogoutModal}
+                    onCancel={() => {
+                        this.setState({
+                            showLogoutModal: false
+                        })
+                    }}>
+                    <p>确认要退出账号吗?</p>
+                </Modal>
                 <Row className='header-top'>
                     {menuType ? (
                         <Col span={6} className='logo'>
@@ -73,9 +103,9 @@ class Header extends Component {
                     }
                     <Col span={menuType ? 18 : 24}>
                         <span>欢迎，{this.state.userName}</span>
-                        <NavLink to='/login'>
-                           退出
-                        </NavLink>
+                        <a onClick={() => { this.handleLogout('confirm') }}>
+                            退出
+                            </a>
                     </Col>
                 </Row>
                 {
@@ -100,7 +130,7 @@ class Header extends Component {
                 }
 
             </div>
-        );
+        )
     }
 }
 
