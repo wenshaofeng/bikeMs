@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { HashRouter, Route, Switch, Redirect } from 'react-router-dom';
 import App from './App';
-import Login from './views/login';
+import { LoadableLogin } from './asynLoading/loadable';
 import NoMatch from './views/nomatch';
 import Admin from './admin';
 import Home from './views/home';
@@ -28,7 +28,7 @@ import AdvancedTable from './views/table/advancedTable';
 import City from './views/city'  //城市管理
 import Order from './views/order' //订单管理
 import User from './views/user' //员工管理
-import BikeMap from './views/bikeMap' //车辆地图
+import { BikeMap } from './asynLoading/loadable' //车辆地图
 import RichText from './views/rich' // 富文本
 import Permission from './views/permission' // 权限控制
 
@@ -51,7 +51,7 @@ class IRouter extends Component {
                                 <Route path='/common/order/detail/:orderId/:user_name/:order_sn' component={OrderDetail} />
                             </Common>
                         )} />
-                        <Route path='/login' component={Login} />
+                        <Route path='/login' component={LoadableLogin} />
                         <Route path='/' render={() => (
                             <Admin>
                                 <Switch>

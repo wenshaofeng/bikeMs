@@ -62,7 +62,7 @@ class Order extends Component {
     }
 
     requestList = () => {
-        let _this = this
+        // let _this = this
         axios.requestList(this, '/order/list', this.params, true)
         // axios
         //     .get({

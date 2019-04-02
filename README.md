@@ -22,3 +22,5 @@ From [React全家桶+AntD 共享单车后台管理系统开发](https://coding.i
 - [权限控制](./09.md)
 
 - [集成Redux](./10.md)
+
+- [路由异步加载](./11.md)
