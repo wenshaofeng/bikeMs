@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import MenuConfig from './../../config/menuConfig'
 import { Menu, Icon } from 'antd' // 获取菜单
-import { NavLink } from 'react-router-dom'
+import { NavLink, withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { switchMenu } from '../../store/actionCreator'
 import './index.less'
@@ -11,8 +11,8 @@ class NavLeft extends Component {
     state = {
         currentKey: ''
     }
-    componentDidMount() { 
-        
+    componentDidMount() {
+
         const menuTreeNode = this.renderMenu(MenuConfig)
         let currentKey = window.location.hash.replace(/#|\?.*$/g, '')
 
@@ -22,6 +22,13 @@ class NavLeft extends Component {
         }))
 
     }
+
+    // componentDidUpdate() {
+    //     let currentKey = this.props.location.pathname
+    //     this.setState((preState) => ({
+    //         currentKey
+    //     }))
+    // }
 
 
     // 菜单渲染
@@ -47,15 +54,16 @@ class NavLeft extends Component {
     handleChangeMenu = ({ item }) => {
         const { dispatch } = this.props
         dispatch(switchMenu(item.props.title))
-        console.log(item);
+       /*  console.log(item);
 
         this.setState((preState) => ({
             currentKey: item.props.eventKey
-        }))
+        })) */
     }
 
 
     render() {
+        const { urlCurrentKey } = this.props
         return (
             <Fragment>
                 <div className="logo">
@@ -66,7 +74,7 @@ class NavLeft extends Component {
                     onSelect={this.handleSelectedMenuItem}
                     onClick={this.handleChangeMenu}
                     theme='dark'
-                    selectedKeys={[this.state.currentKey]}>
+                    selectedKeys={[urlCurrentKey]}>
                     {this.state.menuTreeNode}
                 </Menu>
             </Fragment>
@@ -74,4 +82,9 @@ class NavLeft extends Component {
     }
 }
 
-export default connect()(NavLeft);
+const mapState = (state) => ({
+    urlMenuName: state.url,
+    urlCurrentKey: state.path
+})
+
+export default connect(mapState, null)(withRouter(NavLeft));

@@ -5,13 +5,19 @@ export const switchMenu = (menuName) => ({//抽离出action的创建，方便管
     menuName
 })
 
-export const handleLogin = (token)=>({
-    type:actionTypes.USER_LOGIN,
+export const switchUrl = (url,path) => ({
+    type: actionTypes.SWITCH_URL,
+    url,
+    path
+})
+
+export const handleLogin = (token) => ({
+    type: actionTypes.USER_LOGIN,
     token
 })
 
-export const handleLogout = (token)=>({
-    type:actionTypes.USER_LOGOUT,
+export const handleLogout = (token) => ({
+    type: actionTypes.USER_LOGOUT,
     token
 })
 

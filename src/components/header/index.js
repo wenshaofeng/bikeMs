@@ -42,6 +42,8 @@ class Header extends Component {
         }, 1000)
         this.getWeatherAPIData()
     }
+
+
     getWeatherAPIData() { // 获取百度天气接口
         let city = '深圳'
         axios.jsonp({
@@ -59,7 +61,7 @@ class Header extends Component {
         })
     }
 
-    handleLogout = (type) => {
+    handleLogout = (type) => { // 退出登陆
         const { dispatch } = this.props
         console.log(typeof type); // String
         let _that = this
@@ -81,6 +83,7 @@ class Header extends Component {
     render() {
         const menuType = this.props.menuType
         const menuName = this.props.menuName
+        const urlMenuName = this.props.urlMenuName 
         return (
             <div className='header'>
                 <Modal
@@ -111,7 +114,7 @@ class Header extends Component {
                 {
                     menuType ? ('') : (<Row className='breadcrumb'>
                         <Col span={4} className='breadcrumb-title'>
-                            {menuName ? menuName : this.state.title}
+                            {urlMenuName ? urlMenuName : this.state.title}
                         </Col>
                         <Col span={20} className='weather'>
                             <span className='date'>{this.state.sysTime}</span>
@@ -135,7 +138,8 @@ class Header extends Component {
 }
 
 const mapState = (state) => ({
-    menuName: state.menuName
+    menuName: state.menuName,
+    urlMenuName : state.url
 })
 
 export default connect(mapState, null)(Header);
